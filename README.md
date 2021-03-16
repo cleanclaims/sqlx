@@ -73,7 +73,7 @@ import (
     "log"
     
     _ "github.com/lib/pq"
-    "github.com/jmoiron/sqlx"
+    "github.com/cleanclaims/sqlx"
 )
 
 var schema = `

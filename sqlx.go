@@ -12,7 +12,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/jmoiron/sqlx/reflectx"
+	"github.com/cleanclaims/sqlx/reflectx"
 )
 
 // Although the NameMapper is convenient, in practice it should not
@@ -321,11 +321,24 @@ func (db *DB) Select(dest interface{}, query string, args ...interface{}) error 
 	return Select(db, dest, query, args...)
 }
 
+// NamedSelect using this DB.
+// Any named placeholder parameters are replaced with fields from arg.
+func (db *DB) NamedSelect(dest interface{}, query string, arg interface{}) error {
+	return NamedSelect(db, dest, query, arg)
+}
+
 // Get using this DB.
 // Any placeholder parameters are replaced with supplied args.
 // An error is returned if the result set is empty.
 func (db *DB) Get(dest interface{}, query string, args ...interface{}) error {
 	return Get(db, dest, query, args...)
+}
+
+// Get using this DB.
+// Any named placeholder parameters are replaced with fields from arg.
+// An error is returned if the result set is empty.
+func (db *DB) NamedGet(dest interface{}, query string, arg map[string]interface{}) error {
+	return NamedGet(db, dest, query, arg)
 }
 
 // MustBegin starts a transaction, and panics on error.  Returns an *sqlx.Tx instead
@@ -427,6 +440,12 @@ func (tx *Tx) Select(dest interface{}, query string, args ...interface{}) error 
 	return Select(tx, dest, query, args...)
 }
 
+// NamedSelect a named query within a transaction.
+// Any named placeholder parameters are replaced with fields from arg.
+func (tx *Tx) NamedSelect(dest interface{}, query string, arg interface{}) error {
+	return NamedSelect(tx, dest, query, arg)
+}
+
 // Queryx within a transaction.
 // Any placeholder parameters are replaced with supplied args.
 func (tx *Tx) Queryx(query string, args ...interface{}) (*Rows, error) {
@@ -449,6 +468,12 @@ func (tx *Tx) QueryRowx(query string, args ...interface{}) *Row {
 // An error is returned if the result set is empty.
 func (tx *Tx) Get(dest interface{}, query string, args ...interface{}) error {
 	return Get(tx, dest, query, args...)
+}
+
+// NamedGet a named query within a transaction.
+// Any named placeholder parameters are replaced with fields from arg.
+func (tx *Tx) NamedGet(dest interface{}, query string, arg interface{}) error {
+	return NamedGet(tx, dest, query, arg)
 }
 
 // MustExec runs MustExec within a transaction.
