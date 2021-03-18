@@ -1,4 +1,4 @@
-module github.com/cleanclaims/sqlx
+module cleanclaims/sqlx
 
 require (
 	github.com/go-sql-driver/mysql v1.4.0
